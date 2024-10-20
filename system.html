@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spacer Dash - System Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            background-color: #f4f6f9;
+            font-family: 'Roboto', sans-serif;
+        }
+        /* Sidebar Styling */
+        #sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            min-height: 100vh;
+            position: fixed;
+            transition: width 0.3s;
+        }
+        #sidebar.collapsed {
+            width: 80px;
+        }
+        #sidebar .icon {
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #sidebar .icon:hover {
+            background-color: #34495e;
+        }
+        #sidebar .icon i {
+            margin-right: 10px;
+        }
+        #sidebar.collapsed .icon i {
+            margin: 0 auto;
+        }
+        #sidebar.collapsed .icon span {
+            display: none;
+        }
+        /* Main Content Area */
+        #content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 30px;
+            transition: margin-left 0.3s;
+        }
+        #content.collapsed {
+            margin-left: 80px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        /* Services Table */
+        .services-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .services-table th, .services-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .services-table th {
+            background-color: #2c3e50;
+            color: white;
+            text-align: left;
+        }
+        .service-status {
+            display: flex;
+            align-items: center;
+        }
+        .service-status span {
+            margin-left: 10px;
+        }
+        .service-status.running {
+            color: green;
+        }
+        .service-status.stopped {
+            color: red;
+        }
+        .control-btns button {
+            margin-right: 5px;
+        }
+        /* Sidebar Toggle */
+        .toggle-sidebar {
+            cursor: pointer;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .toggle-sidebar:hover {
+            background-color: #1f6e8c;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="icon"><i class="fas fa-clock"></i><span> System Clock</span></div>
+        <div class="icon"><i class="fas fa-rocket"></i><span> Fast Launch</span></div>
+        <div class="icon"><i class="fas fa-cog"></i><span> Settings</span></div>
+        <div class="icon"><i class="fas fa-broom"></i><span> System Cleanup</span></div>
+        <div class="icon"><i class="fas fa-tasks"></i><span> Process Manager</span></div>
+        <div class="text-center mt-4">
+            <button class="toggle-sidebar" id="toggle-sidebar">Collapse Sidebar</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <h1>System Services</h1>
+        <table class="services-table">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="service-list">
+                <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Sidebar toggle functionality
+        $('#toggle-sidebar').on('click', function() {
+            $('#sidebar').toggleClass('collapsed');
+            $('#content').toggleClass('collapsed');
+        });
+
+        // Example service data
+        const services = [
+            { name: 'Apache', status: 'running' },
+            { name: 'MySQL', status: 'stopped' },
+            { name: 'Nginx', status: 'running' },
+            { name: 'MongoDB', status: 'stopped' }
+        ];
+
+        // Render services list dynamically
+        function renderServices() {
+            const serviceList = $('#service-list');
+            serviceList.empty();
+
+            services.forEach(service => {
+                const statusClass = service.status === 'running' ? 'running' : 'stopped';
+                const buttonState = service.status === 'running' ? 
+                    `<button class="btn btn-danger btn-sm stop-btn">Stop</button>` :
+                    `<button class="btn btn-success btn-sm start-btn">Start</button>`;
+
+                serviceList.append(`
+                    <tr>
+                        <td>${service.name}</td>
+                        <td class="service-status ${statusClass}">
+                            <i class="fas ${service.status === 'running' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                            <span>${service.status.charAt(0).toUpperCase() + service.status.slice(1)}</span>
+                        </td>
+                        <td class="control-btns">
+                            ${buttonState}
+                            <button class="btn btn-warning btn-sm restart-btn">Restart</button>
+                        </td>
+                    </tr>
+                `);
+            });
+
+            // Handle Start/Stop button click events
+            $('.start-btn').on('click', function() {
+                const serviceName = $(this).closest('tr').find('td:first').text();
+                updateServiceStatus(serviceName, 'running');
+            });
+
+            $('.stop-btn').on('click', function() {
+                const serviceName = $(this).closest('tr').find('td:first').text();
+                updateServiceStatus(serviceName, 'stopped');
+            });
+
+            $('.restart-btn').on('click', function() {
+                const serviceName = $(this).closest('tr').find('td:first').text();
+                alert(`${serviceName} is restarting...`);
+                setTimeout(() => {
+                    alert(`${serviceName} restarted successfully!`);
+                }, 1500);
+            });
+        }
+
+        // Update service status
+        function updateServiceStatus(serviceName, status) {
+            const service = services.find(s => s.name === serviceName);
+            service.status = status;
+            renderServices();
+        }
+
+        // Initial rendering of services
+        renderServices();
+    </script>
+
+</body>
+</html>
+

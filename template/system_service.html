@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonOpSec - System Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/system_service.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="icon"><i class="fas fa-tachometer-alt"></i><span>System Overview</span></div>
+        <div class="icon"><i class="fas fa-microchip"></i><span>Resource Analytics</span></div>
+        <div class="icon"><i class="fas fa-cogs"></i><span>Service Controller</span></div>
+        <div class="icon"><i class="fas fa-broom"></i><span>Disk Optimizer</span></div>
+        <div class="icon"><i class="fas fa-shield-alt"></i><span>Security Monitor</span></div>
+        <div class="icon"><i class="fas fa-rocket"></i><span>Performance Booster</span></div>
+        <div class="text-center mt-4">
+            <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Toggle Sidebar">
+                <i class="bi bi-layout-sidebar-inset"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <h1>System Services</h1>
+        <table class="services-table">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>CPU Usage (%)</th>
+                    <th>Memory Usage (MB)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="service-list">
+                <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/js/system_service.js"></script>
+
+</body>
+</html>

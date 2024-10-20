@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spacer Dash Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background-color: #343a40;
+      padding-top: 20px;
+    }
+
+    .sidebar .nav-link {
+      color: white;
+      font-size: 18px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar .nav-link:hover {
+      background-color: #495057;
+    }
+
+    .nav-link i {
+      margin-right: 10px;
+    }
+
+    .topbar {
+      background-color: #f8f9fa;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .main-content {
+      padding: 20px;
+    }
+
+    .widget {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .progress-bar {
+      background-color: #007bff;
+    }
+
+    .system-info {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="d-flex">
+    <nav class="sidebar flex-column p-3">
+      <a href="#" class="nav-link"><i class="fas fa-clock"></i> Clock</a>
+      <a href="#" class="nav-link"><i class="fas fa-rocket"></i> Rocket</a>
+      <a href="#" class="nav-link"><i class="fas fa-cogs"></i> Settings</a>
+      <a href="#" class="nav-link"><i class="fas fa-broom"></i> Cleanup</a>
+      <a href="#" class="nav-link"><i class="fas fa-tasks"></i> Process Manager</a>
+    </nav>
+
+    <!-- Main content -->
+    <div class="flex-grow-1">
+      <!-- Topbar -->
+      <div class="topbar">
+        <h4>System Admin: John Doe</h4>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div class="main-content">
+        <!-- CPU Usage -->
+        <div class="widget">
+          <h5>CPU Usage</h5>
+          <div class="progress">
+            <div class="progress-bar" id="cpuUsageBar" role="progressbar" style="width: 30%;" aria-valuenow="30"
+              aria-valuemin="0" aria-valuemax="100">30%</div>
+          </div>
+        </div>
+
+        <!-- Memory Usage -->
+        <div class="widget">
+          <h5>Memory Usage</h5>
+          <p>Used: <span id="memoryUsageText">1.5GB/4GB</span></p>
+          <div class="progress">
+            <div class="progress-bar" id="memoryUsageBar" role="progressbar" style="width: 40%;" aria-valuenow="40"
+              aria-valuemin="0" aria-valuemax="100">40%</div>
+          </div>
+        </div>
+
+        <!-- Disk Space -->
+        <div class="widget">
+          <h5>Disk Space</h5>
+          <p>Used: <span id="diskUsageText">250GB/500GB</span></p>
+          <div class="progress">
+            <div class="progress-bar" id="diskUsageBar" role="progressbar" style="width: 50%;" aria-valuenow="50"
+              aria-valuemin="0" aria-valuemax="100">50%</div>
+          </div>
+        </div>
+
+        <!-- Downloads and Uploads -->
+        <div class="widget">
+          <h5>Network Activity</h5>
+          <p>Downloads: <span id="downloadText">3MB/0 bytes/sec</span></p>
+          <p>Uploads: <span id="uploadText">500KB/10 bytes/sec</span></p>
+        </div>
+
+        <!-- System Info -->
+        <div class="widget">
+          <h5>System Info</h5>
+          <p class="system-info">Operating System: Linux</p>
+          <p class="system-info">Processor: Intel Core i7</p>
+          <p class="system-info">System Uptime: <span id="uptimeText">24 hours</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Example dynamic updates (replace with actual data fetching methods)
+    function updateStats() {
+      // CPU Usage (example)
+      let cpuUsage = Math.floor(Math.random() * 100);
+      $('#cpuUsageBar').css('width', cpuUsage + '%').text(cpuUsage + '%');
+
+      // Memory Usage (example)
+      let usedMemory = (Math.random() * 4).toFixed(1);
+      $('#memoryUsageText').text(`${usedMemory}GB/4GB`);
+      $('#memoryUsageBar').css('width', (usedMemory / 4 * 100) + '%').text(`${(usedMemory / 4 * 100).toFixed(0)}%`);
+
+      // Disk Usage (example)
+      let usedDisk = (Math.random() * 500).toFixed(1);
+      $('#diskUsageText').text(`${usedDisk}GB/500GB`);
+      $('#diskUsageBar').css('width', (usedDisk / 500 * 100) + '%').text(`${(usedDisk / 500 * 100).toFixed(0)}%`);
+
+      // Downloads & Uploads (example)
+      let downloads = (Math.random() * 10).toFixed(2);
+      let uploadSpeed = (Math.random() * 10).toFixed(2);
+      $('#downloadText').text(`${downloads}MB/0 bytes/sec`);
+      $('#uploadText').text(`500KB/${uploadSpeed} bytes/sec`);
+
+      // Uptime (example)
+      let uptime = (Math.random() * 24).toFixed(0);
+      $('#uptimeText').text(`${uptime} hours`);
+    }
+
+    setInterval(updateStats, 5000); // Update every 5 seconds
+  </script>
+</body>
+
+</html>
+

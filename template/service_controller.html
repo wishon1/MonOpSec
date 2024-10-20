@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiMate - Service Controller</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: none;
+        }
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .service-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        .service-info {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+        .service-name {
+            font-weight: bold;
+        }
+        .service-description {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .resource-usage {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        .form-switch {
+            padding-left: 2.5em;
+        }
+        .form-switch .form-check-input {
+            width: 3em;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <h1 class="mb-4">Service Controller</h1>
+        
+        <div class="row">
+            <!-- System Services Card -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0"><i class="fas fa-cogs me-2"></i>System Services</h5>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="toggle-all-services">
+                            <label class="form-check-label" for="toggle-all-services">Toggle All</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-box">
+                            <input type="text" class="form-control" id="service-search" placeholder="Search services...">
+                        </div>
+                        <ul class="list-group" id="service-list">
+                            <!-- Services will be dynamically added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Startup Applications Card -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0"><i class="fas fa-rocket me-2"></i>Startup Applications</h5>
+                        <button class="btn btn-primary" id="add-startup-app">Add Startup App</button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id="startup-app-list">
+                            <!-- Startup apps will be dynamically added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const services = [
+            { name: "SSH Server", description: "OpenSSH server daemon", icon: "fa-server", enabled: true, cpu: "1%", memory: "100MB", status: "running" },
+            { name: "Firewall", description: "Uncomplicated Firewall", icon: "fa-shield-alt", enabled: true, cpu: "0%", memory: "50MB", status: "running" },
+            { name: "Print Service", description: "CUPS Printing Service", icon: "fa-print", enabled: false, cpu: "0%", memory: "30MB", status: "stopped" },
+            { name: "Bluetooth", description: "Bluetooth service", icon: "fa-bluetooth-b", enabled: true, cpu: "2%", memory: "80MB", status: "running" },
+            { name: "Apache Web Server", description: "Apache HTTP Server", icon: "fa-globe", enabled: false, cpu: "5%", memory: "200MB", status: "stopped" }
+        ];
+
+        const startupApps = [
+            { name: "Discord", command: "/usr/bin/discord", enabled: true, cpu: "2%", memory: "300MB", status: "running" },
+            { name: "Dropbox", command: "/usr/bin/dropbox", enabled: true, cpu: "1%", memory: "150MB", status: "running" },
+            { name: "Slack", command: "/usr/bin/slack", enabled: false, cpu: "0%", memory: "0MB", status: "stopped" }
+        ];
+
+        function createServiceItem(service) {
+            return `
+                <li class="list-group-item">
+                    <div class="service-info">
+                        <i class="fas ${service.icon} service-icon"></i>
+                        <span class="service-name">${service.name}</span>
+                        <div class="service-description">${service.description}</div>
+                        <div class="resource-usage">CPU: ${service.cpu}, Memory: ${service.memory}, Status: ${service.status}</div>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input service-toggle" type="checkbox" ${service.enabled ? 'checked' : ''}>
+                    </div>
+                </li>
+            `;
+        }
+
+        function createStartupAppItem(app) {
+            return `
+                <li class="list-group-item">
+                    <div class="service-info">
+                        <span class="service-name">${app.name}</span>
+                        <div class="service-description">${app.command}</div>
+                        <div class="resource-usage">CPU: ${app.cpu}, Memory: ${app.memory}, Status: ${app.status}</div>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input startup-app-toggle" type="checkbox" ${app.enabled ? 'checked' : ''}>
+                    </div>
+                </li>
+            `;
+        }
+
+        function populateServices() {
+            const serviceList = $('#service-list');
+            serviceList.empty();
+            services.forEach(service => {
+                serviceList.append(createServiceItem(service));
+            });
+        }
+
+        function populateStartupApps() {
+            const startupAppList = $('#startup-app-list');
+            startupAppList.empty();
+            startupApps.forEach(app => {
+                startupAppList.append(createStartupAppItem(app));
+            });
+        }
+
+        $(document).ready(function() {
+            populateServices();
+            populateStartupApps();
+
+            // Toggle all services
+            $('#toggle-all-services').change(function() {
+                const isChecked = $(this).prop('checked');
+                $('.service-toggle').prop('checked', isChecked);
+                services.forEach(service => service.enabled = isChecked);
+            });
+
+            // Service search functionality
+            $('#service-search').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                $('#service-list li').each(function() {
+                    const serviceName = $(this).find('.service-name').text().toLowerCase();
+                    const serviceDescription = $(this).find('.service-description').text().toLowerCase();
+                    $(this).toggle(serviceName.includes(searchTerm) || serviceDescription.includes(searchTerm));
+                });
+            });
+
+            // Add startup app
+            $('#add-startup-app').click(function() {
+                $('#addStartupAppModal').modal('show');
+            });
+
+            $('#saveStartupApp').click(function() {
+                const name = $('#appName').val();
+                const command = $('#appCommand').val();
+                const enabled = $('#appEnabled').prop('checked');
+
+                if (name && command) {
+                    startupApps.push({ name, command, enabled });
+                    populateStartupApps();
+                    $('#addStartupAppModal').modal('hide');
+                    $('#addStartupAppForm')[0].reset();
+                }
+            });
+
+            // Toggle individual services and startup apps
+            $(document).on('change', '.service-toggle, .startup-app-toggle', function() {
+                const isService = $(this).hasClass('service-toggle');
+                const name = $(this).closest('li').find('.service-name').text();
+                const enabled = $(this).prop('checked');
+
+                if (isService) {
+                    const service = services.find(s => s.name === name);
+                    if (service) service.enabled = enabled;
+                } else {
+                    const app = startupApps.find(a => a.name === name);
+                    if (app) app.enabled = enabled;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

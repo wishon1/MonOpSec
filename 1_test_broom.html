@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spacer Dash - Broom</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+        }
+        #sidebar {
+            width: 80px;
+            background-color: #202a3b;
+            min-height: 100vh;
+        }
+        #sidebar .icon {
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            cursor: pointer;
+        }
+        #sidebar .icon:hover {
+            background-color: #2e3a50;
+        }
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .card {
+            border: none;
+            margin-bottom: 15px;
+        }
+        .progress {
+            height: 10px;
+            background-color: #e9ecef;
+        }
+        .progress-bar {
+            background-color: #28a745;
+        }
+        .clean-btn {
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .clean-btn:hover {
+            background-color: #ff3333;
+        }
+        .system-info, .cleanup-section {
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="icon"><i class="fas fa-clock"></i></div>
+        <div class="icon"><i class="fas fa-rocket"></i></div>
+        <div class="icon"><i class="fas fa-cog"></i></div>
+        <div class="icon"><i class="fas fa-broom"></i></div>
+        <div class="icon"><i class="fas fa-tasks"></i></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <h1>System Cleanup</h1>
+
+        <div class="row">
+            <!-- Package Cache -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Package Cache</h5>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 60%" id="package-cache"></div>
+                        </div>
+                        <p id="package-cache-size">1.2GB of cache files</p>
+                        <button class="clean-btn" onclick="clean('package-cache')">Clean Cache</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trash Report -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Trash Report</h5>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 80%" id="trash-report"></div>
+                        </div>
+                        <p id="trash-report-size">2.5GB of trash files</p>
+                        <button class="clean-btn" onclick="clean('trash-report')">Empty Trash</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Application Logs -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Application Logs</h5>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" id="app-logs"></div>
+                        </div>
+                        <p id="app-logs-size">0.9GB of log files</p>
+                        <button class="clean-btn" onclick="clean('app-logs')">Clear Logs</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Trash -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Application Trash</h5>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 70%" id="app-trash"></div>
+                        </div>
+                        <p id="app-trash-size">3.4GB of application trash</p>
+                        <button class="clean-btn" onclick="clean('app-trash')">Remove Trash</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Cleanup Options -->
+        <div class="row">
+            <!-- Temporary Files -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Temporary Files</h5>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 40%" id="temp-files"></div>
+                        </div>
+                        <p id="temp-files-size">1.8GB of temporary files</p>
+                        <button class="clean-btn" onclick="clean('temp-files')">Clear Temp Files</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unused Applications -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Unused Applications</h5>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 30%" id="unused-apps"></div>
+                        </div>
+                        <p id="unused-apps-size">5 unused apps</p>
+                        <button class="clean-btn" onclick="clean('unused-apps')">Remove Unused Apps</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to simulate cleanup
+        function clean(section) {
+            alert('Cleaning ' + section + '...');
+            $('#' + section + '-size').text('0GB remaining');
+            $('#' + section).css('width', '0%');
+        }
+        
+        // Dynamic data update (simulate)
+        setInterval(function() {
+            // Simulate updating progress bars
+            $('#package-cache').css('width', Math.random() * 100 + '%');
+            $('#trash-report').css('width', Math.random() * 100 + '%');
+            $('#app-logs').css('width', Math.random() * 100 + '%');
+            $('#app-trash').css('width', Math.random() * 100 + '%');
+            $('#temp-files').css('width', Math.random() * 100 + '%');
+            $('#unused-apps').css('width', Math.random() * 100 + '%');
+        }, 5000);
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spacer Dash - Startup Apps</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+        }
+        /* Collapsible Sidebar */
+        #sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            min-height: 100vh;
+            position: fixed;
+            transition: width 0.3s;
+        }
+        #sidebar.collapsed {
+            width: 80px;
+        }
+        #sidebar .icon {
+            color: #fff;
+            text-align: left;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        #sidebar .icon:hover {
+            background-color: #34495e;
+        }
+        #sidebar .icon i {
+            margin-right: 10px;
+        }
+        #sidebar.collapsed .icon i {
+            margin: 0 auto;
+        }
+        #sidebar.collapsed .icon span {
+            display: none;
+        }
+        /* Main Content */
+        #content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 30px;
+            transition: margin-left 0.3s;
+        }
+        #content.collapsed {
+            margin-left: 80px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        /* App List */
+        .app-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .app-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #fff;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .app-item:hover {
+            background-color: #e8e8e8;
+        }
+        .app-info {
+            display: flex;
+            align-items: center;
+        }
+        .app-info img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            border-radius: 50%;
+        }
+        .app-toggle {
+            display: flex;
+            align-items: center;
+        }
+        .app-toggle .form-check-input {
+            margin-right: 10px;
+        }
+        /* Toggle Sidebar Button */
+        .toggle-sidebar {
+            cursor: pointer;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .toggle-sidebar:hover {
+            background-color: #1f6e8c;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="icon"><i class="fas fa-clock"></i><span> System Clock</span></div>
+        <div class="icon"><i class="fas fa-rocket"></i><span> Rocket Launch</span></div>
+        <div class="icon"><i class="fas fa-cog"></i><span> Settings</span></div>
+        <div class="icon"><i class="fas fa-broom"></i><span> System Cleanup</span></div>
+        <div class="icon"><i class="fas fa-tasks"></i><span> Process Manager</span></div>
+        <div class="text-center mt-4">
+            <button class="toggle-sidebar" id="toggle-sidebar">Collapse Sidebar</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <h1>Startup Apps</h1>
+        <ul class="app-list" id="app-list">
+            <!-- Dynamic app items will be appended here -->
+        </ul>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Sidebar toggle functionality
+        $('#toggle-sidebar').on('click', function() {
+            $('#sidebar').toggleClass('collapsed');
+            $('#content').toggleClass('collapsed');
+        });
+
+        // Example dynamic startup apps list
+        const startupApps = [
+            { name: 'Chrome', icon: 'chrome.png', enabled: true },
+            { name: 'Slack', icon: 'slack.png', enabled: false },
+            { name: 'Spotify', icon: 'spotify.png', enabled: true },
+            { name: 'Visual Studio Code', icon: 'vscode.png', enabled: true },
+            { name: 'Dropbox', icon: 'dropbox.png', enabled: false }
+        ];
+
+        // Render the app list dynamically
+        function renderAppList() {
+            const appList = $('#app-list');
+            appList.empty();
+
+            startupApps.forEach(app => {
+                appList.append(`
+                    <li class="app-item">
+                        <div class="app-info">
+                            <img src="${app.icon}" alt="${app.name} Icon">
+                            <span>${app.name}</span>
+                        </div>
+                        <div class="app-toggle">
+                            <input class="form-check-input" type="checkbox" ${app.enabled ? 'checked' : ''} data-app="${app.name}">
+                            <label>Launch at Startup</label>
+                        </div>
+                    </li>
+                `);
+            });
+
+            // Event handler for toggling apps
+            $('.form-check-input').on('change', function() {
+                const appName = $(this).data('app');
+                const appIndex = startupApps.findIndex(app => app.name === appName);
+                startupApps[appIndex].enabled = $(this).is(':checked');
+                console.log(`${appName} is now ${startupApps[appIndex].enabled ? 'enabled' : 'disabled'} at startup.`);
+            });
+        }
+
+        // Render apps on page load
+        renderAppList();
+    </script>
+
+</body>
+</html>
+
