@@ -1,69 +1,85 @@
-#include "system.h"
+#include "main.h"
 
 /**
  * get_memory_usage - Get the system memory info and calculate memory usage
- * 
- * This function reads from /proc/meminfo and calculates the memory usage
- * in GB.
- * Return: 0 on success, -1 on failure.
+ *
+ * This function reads from /proc/meminfo, calculates memory usage in GB,
+ * and returns the memory usage data in a memory_stats_t structure.
+ * Return: Pointer to memory_stats_t structure on success, NULL on failure.
  */
-int get_memory_usage(void)
-{
+memory_stats_t *get_memory_usage(void) {
     FILE *file_ptr;
     char buffer[256];
     char *fget_ptr;
-    int scanf_one, scanf_two, scanf_three;
-    unsigned long total_mem = 0, free_mem = 0, available_mem = 0, mem_used = 0;
+    unsigned long total_mem = 0, free_mem = 0, available_mem = 0;
+    memory_stats_t *stats = calloc(1, sizeof(memory_stats_t));
 
-    file_ptr = fopen("/proc/meminfo", "r");
-    if (file_ptr == NULL)
-    {
-        perror("Error opening /proc/meminfo");
-        return (-1);  /* Return -1 on failure */
+    if (!stats) {
+        perror("Memory allocation failed");
+        return NULL;
     }
 
-    /* Loop to process each line in /proc/meminfo */
-    while (1)
-    {
+    file_ptr = fopen("/proc/meminfo", "r");
+    if (file_ptr == NULL) {
+        perror("Error opening /proc/meminfo");
+        free(stats);
+        return NULL;
+    }
+
+    while (1) {
         fget_ptr = fgets(buffer, sizeof(buffer), file_ptr);
         if (fget_ptr == NULL)
             break;
 
         /* Extract total memory */
-        scanf_one = sscanf(buffer, "MemTotal: %lu", &total_mem);
-        if (scanf_one == 1)
+        if (sscanf(buffer, "MemTotal: %lu", &total_mem) == 1)
             continue;
 
         /* Extract available memory */
-        scanf_two = sscanf(buffer, "MemAvailable: %lu", &available_mem);
-        if (scanf_two == 1)
+        if (sscanf(buffer, "MemAvailable: %lu", &available_mem) == 1)
             continue;
 
         /* Extract free memory (used as fallback if MemAvailable is not present) */
-        scanf_three = sscanf(buffer, "MemFree: %lu", &free_mem);
-        if (scanf_three == 1)
+        if (sscanf(buffer, "MemFree: %lu", &free_mem) == 1)
             continue;
     }
-
     fclose(file_ptr);
 
-    /* Use MemAvailable if present; otherwise, use MemFree */
     if (available_mem > 0)
     {
-        mem_used = total_mem - available_mem;
+        stats->used_mem = total_mem - available_mem;
     }
     else
     {
-        mem_used = total_mem - free_mem;
+        stats->used_mem = total_mem - free_mem;
     }
 
+    stats->total_mem = total_mem;
+    stats->available_mem = available_mem;
+
     /* Convert kilobytes to gigabytes */
-    float total_mem_gb = total_mem / (1024.0 * 1024.0);  /* KB to GB */
-    float used_mem_gb = mem_used / (1024.0 * 1024.0);    /* KB to GB */
+    stats->total_mem_gb = total_mem / (1024.0 * 1024.0);
+    stats->used_mem_gb = stats->used_mem / (1024.0 * 1024.0);
+    return stats;
+}
 
-    /* Print memory usage in the format "X GB used / Y GB total" */
-    printf("Memory Usage: %.2f GB used / %.2f GB total\n", used_mem_gb, total_mem_gb);
-    instead of printing send the %.2f GB used / %.2f GB total\n", used_mem_gb, total_mem_gb to the send were it will be send to the pyhhon program to be used in the dashboard
+/**
+ * main - Test the get_memory_usage function
+ *
+ * Return: Always 0 on success, non-zero on failure.
+ */
+int main(void) {
+    memory_stats_t *memory_stats = get_memory_usage();
 
-    return to the main function;  /* Return 0 on success */
+    if (memory_stats) {
+        printf("Total Memory: %.2f GB\n", memory_stats->total_mem_gb);
+        printf("Used Memory: %.2f GB\n", memory_stats->used_mem_gb);
+        printf("Available Memory: %.2f GB\n", memory_stats->available_mem / (1024.0 * 1024.0));
+        
+        free(memory_stats); // Free the allocated memory
+    } else {
+        printf("Failed to retrieve memory usage statistics.\n");
+    }
+
+    return 0;
 }
