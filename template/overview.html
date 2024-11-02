@@ -3,71 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OptiMate - Service Controller</title>
+    <title>OptiMate - System Overview</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             display: flex;
-            background-color: #bac6d3;
-            font-family: 'Roboto', sans-serif;
             min-height: 100vh;
         }
 
-        /* Sidebar Styling */
+        /* Sidebar styling */
         #sidebar {
             width: 250px;
-            background-color: #2c3e50;
-            min-height: 100vh;
+            background-color: #264361;
+            color: #fff;
+            padding: 20px;
             position: fixed;
+            height: 100%;
             transition: width 0.3s;
         }
 
         #sidebar.collapsed {
-            width: 80px;
+            width: 70px;
         }
 
         #sidebar .icon {
-            color: white;
-            padding: 15px;
             display: flex;
             align-items: center;
+            padding: 10px 0;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        #sidebar .icon:hover {
-            background-color: #34495e;
+            white-space: nowrap;
         }
 
         #sidebar .icon i {
             margin-right: 10px;
-        }
-
-        #sidebar.collapsed .icon i {
-            margin: 0 auto;
+            font-size: 1.2rem;
         }
 
         #sidebar.collapsed .icon span {
             display: none;
         }
 
-        /* Main Content Area */
+        #sidebar .icon:hover {
+            background-color: #495057;
+            border-radius: 8px;
+        }
+
+        /* Main content styling */
         #content {
-            margin-left: 250px;
-            flex-grow: 1;
-            padding: 30px;
-            transition: margin-left 0.3s;
+            margin-left: 270px;
+            padding: 20px;
+            width: calc(100% - 270px);
+            transition: margin-left 0.3s, width 0.3s;
         }
 
-        #content.collapsed {
-            margin-left: 80px;
+        #sidebar.collapsed + #content {
+            margin-left: 90px;
+            width: calc(100% - 90px);
         }
 
-        /* Card Styles */
         .card {
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
@@ -76,198 +73,274 @@
             border-bottom: none;
         }
 
-        .list-group-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .service-icon {
-            font-size: 1.5em;
-            margin-right: 10px;
-        }
-
-        .service-info {
-            display: flex;
-            flex-direction: column;
-            margin-right: 10px;
-        }
-
-        .service-name {
-            font-weight: bold;
-        }
-
-        .service-description {
-            font-size: 0.9em;
-            color: #6c757d;
-        }
-
-        .resource-usage {
-            font-size: 0.8em;
-            color: #6c757d;
-        }
-
-        .form-switch {
-            padding-left: 2.5em;
-        }
-
-        .form-switch .form-check-input {
-            width: 3em;
-        }
-
-        .search-box {
-            margin-bottom: 20px;
-        }
-
-        /* Sidebar Toggle */
-        .toggle-sidebar {
-            cursor: pointer;
-            background-color: #2980b9;
-            color: white;
-            border: none;
-            padding: 10px;
+        .progress {
+            height: 10px;
             border-radius: 5px;
         }
 
-        .toggle-sidebar:hover {
-            background-color: #1f6e8c;
+        .chart-container {
+            height: 300px;
+        }
+
+        /* Sidebar toggle button */
+        .toggle-sidebar {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            margin-left: 0px;
+        }
+
+        .toggle-sidebar i {
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div id="sidebar">
-        <div class="icon"><i class="fas fa-tachometer-alt"></i><span> System Overview</span></div>
-        <div class="icon"><i class="fas fa-microchip"></i><span> Resource Analytics</span></div>
-        <div class="icon"><i class="fas fa-cogs"></i><span> Service Controller</span></div>
-        <div class="icon"><i class="fas fa-broom"></i><span> Disk Optimizer</span></div>
-        <div class="icon"><i class="fas fa-shield-alt"></i><span> Security Monitor</span></div>
-        <div class="icon"><i class="fas fa-rocket"></i><span> Performance Booster</span></div>
-        <div class="text-center mt-4">
-            <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Toggle Sidebar">
-                <i class="fas fa-bars"></i>
-            </button>
+        <button class="toggle-sidebar" id="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="icon">
+            <i class="fas fa-home"></i>
+            <span>System Overview</span>
+        </div>
+        <div class="icon">
+            <i class="fas fa-chart-line"></i>
+            <span>Resource Analytics</span>
+        </div>
+        <div class="icon">
+            <i class="fas fa-cogs"></i>
+            <span>Service Controller</span>
+        </div>
+        <div class="icon">
+            <i class="fas fa-hdd"></i>
+            <span>Disk Optimizer</span>
+        </div>
+        <div class="icon">
+            <i class="fas fa-shield-alt"></i>
+            <span>Security Monitor</span>
+        </div>
+        <div class="icon">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Performance Booster</span>
         </div>
     </div>
 
     <!-- Main Content -->
     <div id="content">
-        <h1 class="mb-4">Service Controller</h1>
+        <h1 class="mb-4">System Overview</h1>
         
         <div class="row">
-            <!-- System Services Card -->
-            <div class="col-lg-6" id="d_card">
+            <!-- CPU Usage Card -->
+            <div class="col-md-3 mb-4">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0"><i class="fas fa-cogs me-2"></i>System Services</h5>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="toggle-all-services">
-                            <label class="form-check-label" for="toggle-all-services">Toggle All</label>
-                        </div>
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-microchip me-2"></i>CPU Usage</h5>
                     </div>
                     <div class="card-body">
-                        <div class="search-box">
-                            <input type="text" class="form-control" id="service-search" placeholder="Search services...">
+                        <h2 class="text-center" id="cpu-usage">0%</h2>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" id="cpu-progress" role="progressbar" style="width: 0%"></div>
                         </div>
-                        <ul class="list-group" id="service-list">
-                            <!-- Services will be dynamically added here -->
-                        </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Startup Applications Card -->
-            <div class="col-lg-6" id="d_card">
+            <!-- Memory Usage Card -->
+            <div class="col-md-3 mb-4">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0"><i class="fas fa-rocket me-2"></i>Startup Applications</h5>
-                        <button class="btn btn-primary" id="add-startup-app">Add Startup App</button>
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-memory me-2"></i>Memory Usage</h5>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group" id="startup-app-list">
-                            <!-- Startup apps will be dynamically added here -->
-                        </ul>
+                        <h2 class="text-center" id="memory-usage">0 GB / 0 GB</h2>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" id="memory-progress" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disk Usage Card -->
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-hdd me-2"></i>Disk Usage</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="text-center" id="disk-usage">0 GB / 0 GB</h2>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" id="disk-progress" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Usage Card -->
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-network-wired me-2"></i>Network Usage</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="text-center" id="network-usage">0 Mbps</h2>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" id="network-progress" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- CPU History Chart -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">CPU History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" id="cpu-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Memory History Chart -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Memory History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" id="memory-chart"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- External JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Sidebar toggle functionality
-        $('#toggle-sidebar').on('click', function() {
+        // Sidebar toggle logic
+        $('#toggle-sidebar').click(function() {
             $('#sidebar').toggleClass('collapsed');
-            $('#content').toggleClass('collapsed');
         });
 
-        const services = [
-            { name: "SSH Server", description: "OpenSSH server daemon", icon: "fa-server", enabled: true, cpu: "1%", memory: "100MB", status: "running" },
-            { name: "Firewall", description: "Uncomplicated Firewall", icon: "fa-shield-alt", enabled: true, cpu: "0%", memory: "50MB", status: "running" },
-            { name: "Print Service", description: "CUPS Printing Service", icon: "fa-print", enabled: false, cpu: "0%", memory: "30MB", status: "stopped" },
-            { name: "Bluetooth", description: "Bluetooth service", icon: "fa-bluetooth-b", enabled: true, cpu: "2%", memory: "80MB", status: "running" },
-            { name: "Apache Web Server", description: "Apache HTTP Server", icon: "fa-globe", enabled: false, cpu: "5%", memory: "200MB", status: "stopped" }
-        ];
-
-        const startupApps = [
-            { name: "Discord", command: "/usr/bin/discord", enabled: true, cpu: "2%", memory: "300MB", status: "running" },
-            { name: "Dropbox", command: "/usr/bin/dropbox", enabled: true, cpu: "1%", memory: "150MB", status: "running" },
-            { name: "Slack", command: "/usr/bin/slack", enabled: false, cpu: "0%", memory: "0MB", status: "stopped" }
-        ];
-
-        function createServiceItem(service) {
-            return `
-                <li class="list-group-item">
-                    <div class="service-info">
-                        <i class="fas ${service.icon} service-icon"></i>
-                        <span class="service-name">${service.name}</span>
-                        <div class="service-description">${service.description}</div>
-                        <div class="resource-usage">CPU: ${service.cpu}, Memory: ${service.memory}, Status: ${service.status}</div>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input service-toggle" type="checkbox" ${service.enabled ? 'checked' : ''}>
-                    </div>
-                </li>
-            `;
+        // Simulated data (replace with real-time data in production)
+        function getRandomValue(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        function createStartupAppItem(app) {
-            return `
-                <li class="list-group-item">
-                    <div class="service-info">
-                        <span class="service-name">${app.name}</span>
-                        <div class="service-description">${app.command}</div>
-                        <div class="resource-usage">CPU: ${app.cpu}, Memory: ${app.memory}, Status: ${app.status}</div>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" ${app.enabled ? 'checked' : ''}>
-                    </div>
-                </li>
-            `;
+        function updateSystemOverview() {
+            // Update CPU Usage
+            let cpuUsage = getRandomValue(0, 100);
+            $('#cpu-usage').text(cpuUsage + '%');
+            $('#cpu-progress').css('width', cpuUsage + '%');
+
+            // Update Memory Usage
+            let memoryUsed = getRandomValue(1, 16);
+            let memoryTotal = 16;
+            let memoryPercentage = (memoryUsed / memoryTotal) * 100;
+            $('#memory-usage').text(memoryUsed + ' GB / ' + memoryTotal + ' GB');
+            $('#memory-progress').css('width', memoryPercentage + '%');
+
+            // Update Disk Usage
+            let diskUsed = getRandomValue(50, 500);
+            let diskTotal = 500;
+            let diskPercentage = (diskUsed / diskTotal) * 100;
+            $('#disk-usage').text(diskUsed + ' GB / ' + diskTotal + ' GB');
+            $('#disk-progress').css('width', diskPercentage + '%');
+
+            // Update Network Usage
+            let networkUsage = getRandomValue(0, 100);
+            $('#network-usage').text(networkUsage + ' Mbps');
+            $('#network-progress').css('width', networkUsage + '%');
         }
 
-        function populateServices() {
-            const serviceList = $('#service-list');
-            serviceList.empty();
-            services.forEach(service => {
-                serviceList.append(createServiceItem(service));
+        // Initialize charts
+        let cpuChart, memoryChart;
+
+        function initializeCharts() {
+            const ctx1 = document.getElementById('cpu-chart').getContext('2d');
+            cpuChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'CPU Usage',
+                        data: [],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('memory-chart').getContext('2d');
+            memoryChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Memory Usage',
+                        data: [],
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 16
+                        }
+                    }
+                }
             });
         }
 
-        function populateStartupApps() {
-            const startupAppList = $('#startup-app-list');
-            startupAppList.empty();
-            startupApps.forEach(app => {
-                startupAppList.append(createStartupAppItem(app));
-            });
+        function updateCharts() {
+            const time = new Date().toLocaleTimeString();
+            
+            // Update CPU Chart
+            cpuChart.data.labels.push(time);
+            cpuChart.data.datasets[0].data.push(getRandomValue(0, 100));
+            if (cpuChart.data.labels.length > 10) {
+                cpuChart.data.labels.shift();
+                cpuChart.data.datasets[0].data.shift();
+            }
+            cpuChart.update();
+
+            // Update Memory Chart
+            memoryChart.data.labels.push(time);
+            memoryChart.data.datasets[0].data.push(getRandomValue(1, 16));
+            if (memoryChart.data.labels.length > 10) {
+                memoryChart.data.labels.shift();
+                memoryChart.data.datasets[0].data.shift();
+            }
+            memoryChart.update();
         }
 
-        // Initial population of services and startup apps
-        populateServices();
-        populateStartupApps();
+        $(document).ready(function() {
+            initializeCharts();
+            updateSystemOverview();
+            setInterval(updateSystemOverview, 5000);
+            setInterval(updateCharts, 5000);
+        });
     </script>
 </body>
 </html>

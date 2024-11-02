@@ -7,6 +7,33 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <dirent.h>
+#include <ctype.h>
+#include <stdint.h>
+#include <sys/sysinfo.h>
+#include <sys/types.h>
+
+typedef struct {
+    float cpu_usage;
+    float total_mem_gb;
+    float used_mem_gb;
+    float total_disk;
+    float used_disk;
+    float free_disk;
+    float download_kbps;
+    float upload_kbps;
+} metrics_t;
+
+/**
+ * typedef struct service_stats {
+    char *name; 
+    char *description;
+    float cpu_usage;   
+    unsigned long memory_usage;
+    char *status;
+} service_stats_t;
+
+*/ 
 
 typedef struct memory_stats {
     unsigned long total_mem;
@@ -27,10 +54,11 @@ typedef struct network_stats {
     float upload_kbps;
 } network_stats_t;
 
+/* service_stats_t* get_services_info(int *service_count); */
+metrics_t* get_all_metrics() 
 float cpu_usage(void);
 memory_stats_t* get_memory_usage(void);
 disk_stats_t* get_disk_usage(void);
 network_stats_t* get_network_usage(void);
-void send_data_to_flask(float cpu, memory_stats_t *memory, disk_stats_t *disk, network_stats_t *network);
 
 #endif /* MAIN_H */

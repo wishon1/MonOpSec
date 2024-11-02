@@ -11,43 +11,31 @@
  * Return: A pointer to disk_stats_t structure containing the disk
  *         usage information. Returns NULL if an error occurs.
  */
-disk_stats_t *get_disk_usage(void) {
+disk_stats_t *get_disk_usage(void)
+{
     struct statvfs stat;
-    disk_stats_t *disk_stats = malloc(sizeof(disk_stats_t));
+    disk_stats_t *disk_stats;
 
-    if (!disk_stats) {
+    disk_stats = malloc(sizeof(disk_stats_t));
+    if (!disk_stats)
+    {
         perror("Memory allocation error");
-        return NULL;
+        return (NULL);
     }
 
-    if (statvfs("/", &stat) != 0) {
+    if (statvfs("/", &stat) != 0)
+    {
         perror("Error getting disk usage");
         free(disk_stats);
-        return NULL;
+        return (NULL);
     }
 
-    // Calculate total and used space in GB
-    disk_stats->total_space = (stat.f_blocks * stat.f_frsize) / (1024.0 * 1024.0 * 1024.0);
-    disk_stats->free_space = (stat.f_bfree * stat.f_frsize) / (1024.0 * 1024.0 * 1024.0);
+    /* Calculate total and used space in GB */
+    disk_stats->total_space = (stat.f_blocks * stat.f_frsize) /
+                              (1024.0 * 1024.0 * 1024.0);
+    disk_stats->free_space = (stat.f_bfree * stat.f_frsize) /
+                             (1024.0 * 1024.0 * 1024.0);
     disk_stats->used_space = disk_stats->total_space - disk_stats->free_space;
 
-    return disk_stats;
-}
-/**
- * disk
-*/
-int main(void) {
-    disk_stats_t *disk_stats = get_disk_usage();
-
-    if (disk_stats) {
-        printf("Total Disk Space: %.2f GB\n", disk_stats->total_space);
-        printf("Used Disk Space: %.2f GB\n", disk_stats->used_space);
-        printf("free space: %.2f GB\n", disk_stats->free_space);
-    
-        free(disk_stats); // Free the allocated memory
-    } else {
-        printf("Failed to retrieve disk usage statistics.\n");
-    }
-
-    return 0;
+    return (disk_stats);
 }

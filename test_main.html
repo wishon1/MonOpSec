@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Usage Monitor</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
+        .usage-container { font-size: 2em; color: #2d6a4f; }
+    </style>
+</head>
+<body>
+    <h1>Real-Time CPU Usage Monitor</h1>
+    <div class="usage-container">
+        CPU Usage: <span id="cpu-usage">Loading...</span>%
+    </div>
+
+    <script>
+        function fetchCpuUsage() {
+            fetch('/api/cpu_usage')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('cpu-usage').textContent = data.cpu_usage;
+                })
+                .catch(error => {
+                    document.getElementById('cpu-usage').textContent = "Error";
+                    console.error("Error fetching CPU usage:", error);
+                });
+        }
+
+        // Fetch CPU usage every 5 seconds
+        setInterval(fetchCpuUsage, 5000);
+        // Initial fetch on page load
+        fetchCpuUsage();
+    </script>
+</body>
+</html>
+
+Explanation of Each Part
+Flask Application: app.py has two routes:
+
+/: Renders the main HTML page.
+/api/cpu_usage: Calls the cpu_usage C program and returns the CPU usage as JSON.
+JavaScript: In index.html, a JavaScript function fetchCpuUsage uses fetch to call the /api/cpu_usage endpoint every 5 seconds, updating the CPU usage displayed on the page.
+
+Jinja Template: Jinja is used here mainly to serve the static page, and JavaScript handles the dynamic content updates.

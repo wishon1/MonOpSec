@@ -1,7 +1,12 @@
 #include "main.h"
 /**
- * cpu_usage - Calculate the CPU usage in percentage
- * Return: CPU usage as a percentage on success, -1 on failure
+ * cpu_usage - Calculate the CPU usage as a percentage.
+ *
+ * This function reads CPU statistics from /proc/stat and calculates
+ * the CPU usage by subtracting idle time from the total CPU time
+ * and converting it to a percentage.
+ *
+ * Return: CPU usage as a percentage on success, -1 on failure.
  */
 float cpu_usage(void)
 {
@@ -43,25 +48,4 @@ float cpu_usage(void)
     cpu_usage_percentage = (float)(total - idle) / (float)total * 100.0;
 
     return (cpu_usage_percentage);
-}
-
-/**
- * main - Test the cpu_usage function
- *
- * Return: Always 0 on success, non-zero on failure.
- */
-int main(void)
-{
-    float usage = cpu_usage();
-
-    if (usage >= 0)
-    {
-        printf("CPU Usage: %.2f%%\n", usage);
-    }
-    else
-    {
-        printf("Failed to retrieve CPU usage statistics.\n");
-    }
-
-    return 0;
 }
