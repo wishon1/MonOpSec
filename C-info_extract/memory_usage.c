@@ -65,27 +65,3 @@ memory_stats_t *get_memory_usage(void)
 
     return (stats);
 }
-
-int main(void)
-{
-    memory_stats_t *memory_stats = get_memory_usage();
-
-    if (memory_stats != NULL)
-    {
-        // Print the memory statistics for testing
-        printf("Total Memory: %lu kB\n", memory_stats->total_mem);
-        printf("Available Memory: %lu kB\n", memory_stats->available_mem);
-        printf("Used Memory: %lu kB\n", memory_stats->used_mem);
-        printf("Total Memory (GB): %.2f GB\n", memory_stats->total_mem_gb);
-        printf("Used Memory (GB): %.2f GB\n", memory_stats->used_mem_gb);
-
-        // Free the allocated memory for stats
-        free(memory_stats);
-    }
-    else
-    {
-        printf("Failed to retrieve memory statistics.\n");
-    }
-
-    return 0;
-}

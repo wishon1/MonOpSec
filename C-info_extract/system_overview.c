@@ -8,7 +8,12 @@
  */
 metrics_t *get_all_metrics(void)
 {
-    metrics_t *metrics = malloc(sizeof(metrics_t));
+    metrics_t *metrics;
+    memory_stats_t *memory_stats;
+    network_stats_t *network_stats;
+    disk_stats_t *disk_stats;
+
+    metrics = malloc(sizeof(metrics_t));
     if (!metrics)
     {
         printf("Failed to allocate memory for metrics structure.\n");
@@ -25,7 +30,7 @@ metrics_t *get_all_metrics(void)
     }
 
     /* Retrieve memory metrics */
-    memory_stats_t *memory_stats = get_memory_usage();
+    memory_stats = get_memory_usage();
     if (!memory_stats)
     {
         printf("Failed to retrieve memory metrics.\n");
@@ -37,7 +42,7 @@ metrics_t *get_all_metrics(void)
     free(memory_stats);
 
     /* Retrieve disk metrics */
-    disk_stats_t *disk_stats = get_disk_usage();
+    disk_stats = get_disk_usage();
     if (!disk_stats)
     {
         printf("Failed to retrieve disk metrics.\n");
@@ -50,7 +55,7 @@ metrics_t *get_all_metrics(void)
     free(disk_stats);
 
     /* Retrieve network metrics */
-    network_stats_t *network_stats = get_network_usage();
+    network_stats = get_network_usage();
     if (!network_stats)
     {
         printf("Failed to retrieve network metrics.\n");
@@ -68,8 +73,10 @@ metrics_t *get_all_metrics(void)
  * free_metrics - Frees the allocated memory for the metrics structure.
  * @metrics: Pointer to the metrics structure to free.
  */
+/*
 void free_metrics(metrics_t *metrics)
 {
     if (metrics)
         free(metrics);
 }
+*/

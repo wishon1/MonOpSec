@@ -46,6 +46,6 @@ float cpu_usage(void)
     /* Calculate the total time spent by the CPU */
     total = user + nice + system + idle;
     cpu_usage_percentage = (float)(total - idle) / (float)total * 100.0;
-
+    
     return (cpu_usage_percentage);
 }

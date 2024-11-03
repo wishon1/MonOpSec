@@ -55,10 +55,10 @@ typedef struct network_stats {
 } network_stats_t;
 
 /* service_stats_t* get_services_info(int *service_count); */
-metrics_t* get_all_metrics() 
-float cpu_usage(void);
-memory_stats_t* get_memory_usage(void);
-disk_stats_t* get_disk_usage(void);
-network_stats_t* get_network_usage(void);
+metrics_t *get_all_metrics();
+float cpu_usage();
+memory_stats_t* get_memory_usage();
+disk_stats_t* get_disk_usage();
+network_stats_t* get_network_usage();
 
 #endif /* MAIN_H */
