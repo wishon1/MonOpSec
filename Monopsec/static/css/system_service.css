@@ -1,0 +1,94 @@
+body {
+    display: flex;
+    background-color: #bac6d3;
+    font-family: 'Roboto', sans-serif;
+}
+/* Sidebar Styling */
+#sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    min-height: 100vh;
+    position: fixed;
+    transition: width 0.3s;
+}
+#sidebar.collapsed {
+    width: 80px;
+}
+#sidebar .icon {
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+#sidebar .icon:hover {
+    background-color: #34495e;
+}
+#sidebar .icon i {
+    margin-right: 10px;
+}
+#sidebar.collapsed .icon i {
+    margin: 0 auto;
+}
+#sidebar.collapsed .icon span {
+    display: none;
+}
+/* Main Content Area */
+#content {
+    margin-left: 250px;
+    flex-grow: 1;
+    padding: 30px;
+    transition: margin-left 0.3s;
+}
+#content.collapsed {
+    margin-left: 80px;
+}
+h1 {
+    margin-bottom: 30px;
+    color: #333;
+}
+/* Services Table */
+.services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+.services-table th, .services-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.services-table th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: left;
+}
+.service-status {
+    display: flex;
+    align-items: center;
+}
+.service-status span {
+    margin-left: 10px;
+}
+.service-status.running {
+    color: green;
+}
+.service-status.stopped {
+    color: red;
+}
+.control-btns button {
+    margin-right: 5px;
+}
+/* Sidebar Toggle */
+.toggle-sidebar {
+    cursor: pointer;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+.toggle-sidebar:hover {
+    background-color: #1f6e8c;
+}
+

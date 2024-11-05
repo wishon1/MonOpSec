@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiMate - Service Controller</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/2_system_service.css"> <!-- Link to external CSS file -->
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="icon"><i class="fas fa-tachometer-alt"></i><span> System Overview</span></div>
+        <div class="icon"><i class="fas fa-microchip"></i><span> Resource Analytics</span></div>
+        <div class="icon"><i class="fas fa-cogs"></i><span> Service Controller</span></div>
+        <div class="icon"><i class="fas fa-broom"></i><span> Disk Optimizer</span></div>
+        <div class="icon"><i class="fas fa-shield-alt"></i><span> Security Monitor</span></div>
+        <div class="icon"><i class="fas fa-rocket"></i><span> Performance Booster</span></div>
+        <div class="text-center mt-4">
+            <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Toggle Sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <h1 class="mb-4">Service Controller</h1>
+        
+        <div class="row">
+            <!-- System Services Card -->
+            <div class="col-lg-6" id="d_card">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0"><i class="fas fa-cogs me-2"></i>System Services</h5>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="toggle-all-services">
+                            <label class="form-check-label" for="toggle-all-services">Toggle All</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-box">
+                            <input type="text" class="form-control" id="service-search" placeholder="Search services...">
+                        </div>
+                        <ul class="list-group" id="service-list">
+                            <!-- Services will be dynamically added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Startup Applications Card -->
+            <div class="col-lg-6" id="d_card">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0"><i class="fas fa-rocket me-2"></i>Startup Applications</h5>
+                        <button class="btn btn-primary" id="add-startup-app">Add Startup App</button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id="startup-app-list">
+                            <!-- Startup apps will be dynamically added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/2_system_service.js"></script> <!-- Link to external JS file -->
+</body>
+</html>
