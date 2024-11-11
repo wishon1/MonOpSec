@@ -11,8 +11,6 @@
             display: flex;
             min-height: 100vh;
         }
-
-        /* Sidebar styling */
         #sidebar {
             width: 250px;
             background-color: #264361;
@@ -22,11 +20,9 @@
             height: 100%;
             transition: width 0.3s;
         }
-
         #sidebar.collapsed {
             width: 70px;
         }
-
         #sidebar .icon {
             display: flex;
             align-items: center;
@@ -34,62 +30,49 @@
             cursor: pointer;
             white-space: nowrap;
         }
-
         #sidebar .icon i {
             margin-right: 10px;
             font-size: 1.2rem;
         }
-
         #sidebar.collapsed .icon span {
             display: none;
         }
-
         #sidebar .icon:hover {
             background-color: #495057;
             border-radius: 8px;
         }
-
-        /* Main content styling */
         #content {
             margin-left: 270px;
             padding: 20px;
             width: calc(100% - 270px);
             transition: margin-left 0.3s, width 0.3s;
         }
-
         #sidebar.collapsed + #content {
             margin-left: 90px;
             width: calc(100% - 90px);
         }
-
         .card {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-
         .card-header {
             background-color: #f8f9fa;
             border-bottom: none;
         }
-
         .progress {
             height: 10px;
             border-radius: 5px;
         }
-
         .chart-container {
             height: 300px;
         }
-
-        /* Sidebar toggle button */
         .toggle-sidebar {
             background-color: transparent;
             border: none;
             color: #fff;
             margin-left: 0px;
         }
-
         .toggle-sidebar i {
             font-size: 1.2rem;
         }
@@ -139,9 +122,9 @@
                         <h5 class="card-title"><i class="fas fa-microchip me-2"></i>CPU Usage</h5>
                     </div>
                     <div class="card-body">
-                        <h2 class="text-center" id="cpu-usage">{{ metrics.cpu_usage }}%</h2>
+                        <h2 class="text-center" id="cpu-usage">0%</h2>
                         <div class="progress">
-                            <div class="progress-bar bg-primary" id="cpu-progress" role="progressbar" style="width: 0%"></div>
+                            <div class="progress-bar bg-primary" id="cpu-progress" role="progressbar"></div>
                         </div>
                     </div>
                 </div>
@@ -154,9 +137,9 @@
                         <h5 class="card-title"><i class="fas fa-memory me-2"></i>Memory Usage</h5>
                     </div>
                     <div class="card-body">
-                        <h2 class="text-center" id="memory-usage">{{ metrics.used_mem_gb }} GB / {{ metrics.total_mem_gb }} GB</h2>
+                        <h2 class="text-center" id="memory-usage"></h2>
                         <div class="progress">
-                            <div class="progress-bar bg-success" id="memory-progress" role="progressbar" style="width: 0%"></div>
+                            <div class="progress-bar bg-success" id="memory-progress" role="progressbar"></div>
                         </div>
                     </div>
                 </div>
@@ -169,9 +152,9 @@
                         <h5 class="card-title"><i class="fas fa-hdd me-2"></i>Disk Usage</h5>
                     </div>
                     <div class="card-body">
-                        <h2 class="text-center" id="disk-usage">{{ metrics.download_kbps }} GB / {{ metrics.upload_kbps }} GB</h2>
+                        <h2 class="text-center" id="disk-usage"></h2>
                         <div class="progress">
-                            <div class="progress-bar bg-warning" id="disk-progress" role="progressbar" style="width: 0%"></div>
+                            <div class="progress-bar bg-warning" id="disk-progress" role="progressbar"></div>
                         </div>
                     </div>
                 </div>
@@ -184,9 +167,9 @@
                         <h5 class="card-title"><i class="fas fa-network-wired me-2"></i>Network Usage</h5>
                     </div>
                     <div class="card-body">
-                        <h2 class="text-center" id="network-usage">metrics.download_kbps Mbps</h2>
+                        <h2 class="text-center" id="network-usage"></h2>
                         <div class="progress">
-                            <div class="progress-bar bg-info" id="network-progress" role="progressbar" style="width: 0%"></div>
+                            <div class="progress-bar bg-info" id="network-progress" role="progressbar"></div>
                         </div>
                     </div>
                 </div>
@@ -224,123 +207,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Sidebar toggle logic
         $('#toggle-sidebar').click(function() {
             $('#sidebar').toggleClass('collapsed');
         });
 
-        // Simulated data (replace with real-time data in production)
-        function getRandomValue(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+        async function fetchMetrics() {
+            try {
+                const response = await fetch('/metrics');
+                const data = await response.json();
 
-        function updateSystemOverview() {
-            // Update CPU Usage
-            let cpuUsage = getRandomValue(0, 100);
-            $('#cpu-usage').text(cpuUsage + '%');
-            $('#cpu-progress').css('width', cpuUsage + '%');
-
-            // Update Memory Usage
-            let memoryUsed = getRandomValue(1, 16);
-            let memoryTotal = 16;
-            let memoryPercentage = (memoryUsed / memoryTotal) * 100;
-            $('#memory-usage').text(memoryUsed + ' GB / ' + memoryTotal + ' GB');
-            $('#memory-progress').css('width', memoryPercentage + '%');
-
-            // Update Disk Usage
-            let diskUsed = getRandomValue(50, 500);
-            let diskTotal = 500;
-            let diskPercentage = (diskUsed / diskTotal) * 100;
-            $('#disk-usage').text(diskUsed + ' GB / ' + diskTotal + ' GB');
-            $('#disk-progress').css('width', diskPercentage + '%');
-
-            // Update Network Usage
-            let networkUsage = getRandomValue(0, 100);
-            $('#network-usage').text(networkUsage + ' Mbps');
-            $('#network-progress').css('width', networkUsage + '%');
-        }
-
-        // Initialize charts
-        let cpuChart, memoryChart;
-
-        function initializeCharts() {
-            const ctx1 = document.getElementById('cpu-chart').getContext('2d');
-            cpuChart = new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'CPU Usage',
-                        data: [],
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100
-                        }
-                    }
-                }
-            });
-
-            const ctx2 = document.getElementById('memory-chart').getContext('2d');
-            memoryChart = new Chart(ctx2, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Memory Usage',
-                        data: [],
-                        borderColor: 'rgb(255, 99, 132)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 16
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateCharts() {
-            const time = new Date().toLocaleTimeString();
-            
-            // Update CPU Chart
-            cpuChart.data.labels.push(time);
-            cpuChart.data.datasets[0].data.push(getRandomValue(0, 100));
-            if (cpuChart.data.labels.length > 10) {
-                cpuChart.data.labels.shift();
-                cpuChart.data.datasets[0].data.shift();
+                // Update meters based on retrieved data
+                updateMeter('cpu-progress', data.cpu.usage, '%', 'cpu-usage');
+                const memoryUsage = (data.memory.used_memory / data.memory.total_memory) * 100;
+                updateMeter('memory-progress', memoryUsage, '%', 'memory-usage', `${data.memory.used_memory}/${data.memory.total_memory} GB`);
+                const diskUsage = (data.disk.used_space / data.disk.total_space) * 100;
+                updateMeter('disk-progress', diskUsage, '%', 'disk-usage', `${data.disk.used_space}/${data.disk.total_space} GB`);
+                updateMeter('network-progress', data.network.download_kbps, ' kbps', 'network-usage');
+            } catch (error) {
+                console.error("Error fetching metrics:", error);
             }
-            cpuChart.update();
-
-            // Update Memory Chart
-            memoryChart.data.labels.push(time);
-            memoryChart.data.datasets[0].data.push(getRandomValue(1, 16));
-            if (memoryChart.data.labels.length > 10) {
-                memoryChart.data.labels.shift();
-                memoryChart.data.datasets[0].data.shift();
-            }
-            memoryChart.update();
         }
 
-        $(document).ready(function() {
-            initializeCharts();
-            updateSystemOverview();
-            setInterval(updateSystemOverview, 5000);
-            setInterval(updateCharts, 5000);
-        });
+        function updateMeter(meterId, value, unit, textId, displayText = `${value.toFixed(1)}${unit}`) {
+            const meter = document.getElementById(meterId);
+            const textElem = document.getElementById(textId);
+            meter.style.width = `${value}%`;
+            textElem.textContent = displayText;
+            meter.textContent = `${value.toFixed(1)}${unit}`;
+        }
+
+        // Fetch metrics every 5 seconds
+        setInterval(fetchMetrics, 5000);
+        fetchMetrics(); // Initial fetch on page load
     </script>
+
 </body>
 </html>
