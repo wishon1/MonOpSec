@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <sys/sysinfo.h>
 #include <sys/types.h>
+#include <time.h>
 
 typedef struct {
     float cpu_usage;
@@ -49,12 +50,21 @@ typedef struct disk_stats {
     float free_space;
 } disk_stats_t;
 
-typedef struct network_stats {
+typedef struct network_stats
+{
     float download_kbps;
     float upload_kbps;
 } network_stats_t;
 
+typedef struct
+{
+    double usage;
+    time_t timestamp;
+} CpuEntry;
+
 /* service_stats_t* get_services_info(int *service_count); */
+void get_cpu_usage(double *cpu_usage, int *num_entries);
+void collect_cpu_history(double *cpu_usage_history, int *history_size);
 metrics_t *get_all_metrics();
 float cpu_usage();
 memory_stats_t* get_memory_usage();
