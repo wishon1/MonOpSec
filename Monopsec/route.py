@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""
+route for the flask app
+"""
 from flask import jsonify, render_template
 from . import app
 import logging

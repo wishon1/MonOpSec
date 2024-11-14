@@ -1,6 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define MAX_HISTORY 100
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/statvfs.h>
@@ -23,6 +25,8 @@ typedef struct {
     float free_disk;
     float download_kbps;
     float upload_kbps;
+    CpuEntry cpu_usage_history[MAX_HISTORY];
+    int history_size;
 } metrics_t;
 
 /**
@@ -64,7 +68,7 @@ typedef struct
 
 /* service_stats_t* get_services_info(int *service_count); */
 void get_cpu_usage(double *cpu_usage, int *num_entries);
-void collect_cpu_history(double *cpu_usage_history, int *history_size);
+void collect_cpu_history(CpuEntry *history, int *size);
 metrics_t *get_all_metrics();
 float cpu_usage();
 memory_stats_t* get_memory_usage();
